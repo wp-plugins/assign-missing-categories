@@ -81,6 +81,7 @@ function assign_missing_categories() {
 	<div class="wrap">
 	<h2><?php _e( 'Assign Missing Categories'); ?></h2>
 	<?php
+	flush();
     foreach ($allposts as $thispost) {
 		// clear from previous iteration
 		$terms = array();
@@ -91,6 +92,7 @@ function assign_missing_categories() {
 			_e( " Assigned default category.<br />");
 		}
 		else _e( "Post $thispost->ID has a category assigned.<br />");
+		flush();
 	}
 	echo "</div>";
 } 
