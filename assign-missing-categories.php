@@ -7,9 +7,12 @@ Version: 1.0
 Author: Stephanie Leary
 Author URI: http://sillybean.net/
 
-Changelog:
-1.0 (November 17, 2008)
-	First release
+== Changelog ==
+
+= 1.1 =
+* user capability check (August 3, 2009)
+= 1.0 =
+* first release (November 17, 2008)
 
 Copyright 2008  Stephanie Leary  (email : steph@sillybean.net)
 
@@ -40,7 +43,7 @@ function assign_missing_categories_add_pages() {
 
 // displays the options page content
 function assign_missing_categories_options() {
-	
+	if ( current_user_can('edit_posts') && current_user_can('edit_pages') ) {  
 	// variables for the field and option names 
 		$hidden_field_name = 'assign_missing_categories_submit_hidden';
 	
@@ -69,7 +72,8 @@ function assign_missing_categories_options() {
 	<p><?php echo get_num_queries(); ?> queries. <?php timer_stop(1); ?> seconds.</p>
     </div>
     
-<?php } // end function assign_missing_categories_options() 
+<?php } // if user can
+} // end function assign_missing_categories_options() 
 
 function assign_missing_categories() {
 	global $wpdb;
