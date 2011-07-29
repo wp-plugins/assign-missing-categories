@@ -2,7 +2,7 @@
 /*
 Plugin Name: Assign Missing Categories
 Plugin URI: http://sillybean.net/code/
-Description: Assigns categories to posts incorrectly stripped of all categories (showing unlinked "Uncategorized" in Manage &rarr; Posts).
+Description: Assigns categories to posts incorrectly stripped of all categories (showing unlinked "Uncategorized" under Posts).
 Version: 1.2
 Author: Stephanie Leary
 Author URI: http://sillybean.net/
