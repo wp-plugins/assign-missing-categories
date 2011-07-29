@@ -3,12 +3,15 @@
 Plugin Name: Assign Missing Categories
 Plugin URI: http://sillybean.net/code/
 Description: Assigns categories to posts incorrectly stripped of all categories (showing unlinked "Uncategorized" in Manage &rarr; Posts).
-Version: 1.0
+Version: 1.2
 Author: Stephanie Leary
 Author URI: http://sillybean.net/
 
 == Changelog ==
-
+= 1.2 =
+* stop using deprecated junk
+* clean the term cache after assigning posts
+* localized strings (July 29, 2011)
 = 1.1 =
 * user capability check (August 3, 2009)
 = 1.0 =
@@ -31,14 +34,10 @@ Copyright 2008  Stephanie Leary  (email : steph@sillybean.net)
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// Hook for adding admin menus
-//add_action('admin_menu', 'assign_missing_categories_add_pages');
 add_action('admin_menu', 'assign_missing_categories_add_pages');
 
-// action function for above hook
 function assign_missing_categories_add_pages() {
-    // Add a new submenu under Options:
-	add_submenu_page('edit.php', 'Assign Missing Categories', 'Assign Missing Categories', 8, __FILE__, 'assign_missing_categories_options');
+	add_submenu_page('edit.php', 'Assign Missing Categories', 'Assign Missing Categories', 'manage_options', __FILE__, 'assign_missing_categories_options');
 }
 
 // displays the options page content
@@ -49,22 +48,22 @@ function assign_missing_categories_options() {
 	
 		// See if the user has posted us some information
 		// If they did, this hidden field will be set to 'Y'
-		if( $_POST[ $hidden_field_name ] == 'Y' ) {
+		if ( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
 			assign_missing_categories();
 			// Put an options updated message on the screen ?>
 			<div class="updated"><p><strong><?php _e('Categories assigned.'); ?></strong></p></div>
 		<?php } // Now display the options editing screen ?>
 	
     <div class="wrap">
-    <?php if( $_POST[ $hidden_field_name ] != 'Y' ) { ?>
+    <?php if ( !isset($_POST[ $hidden_field_name ]) || $_POST[ $hidden_field_name ] != 'Y' ) { ?>
 	<form method="post" id="assign_missing_categories_form">
     <h2><?php _e( 'Assign Missing Categories'); ?></h2>
 	<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
-<p>Press the button below to assign the default category to all posts that are not assigned to any categories.</p>
+	<p>Press the button below to assign the default category to all posts that are not assigned to any categories.</p>
 
 	<p class="submit">
-	<input type="submit" name="submit" value="<?php _e('Assign the default category &raquo;'); ?>" />
+	<input type="submit" name="submit" value="<?php _e('Assign the default category &raquo;'); ?>" class="button-primary" />
 	</p>
 	</form>
     <?php } // if ?>
@@ -79,7 +78,6 @@ function assign_missing_categories() {
 	global $wpdb;
 	// Read in existing option value from database
 	$default = get_option('default_category');
-	$cats = get_all_category_ids();
 	$allposts = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_type = 'post'");	
 	?>
 	<div class="wrap">
@@ -91,13 +89,18 @@ function assign_missing_categories() {
 		$terms = array();
 		$terms = wp_get_post_categories($thispost->ID);
 		if (empty($terms)) { 
-			_e("Post $thispost->ID has no categories assigned.");
+			printf(__("Post %d has no categories assigned."), $thispost->ID);
 			wp_set_post_categories($thispost->ID, $default);
 			_e( " Assigned default category.<br />");
 		}
-		else _e( "Post $thispost->ID has a category assigned.<br />");
+		else printf(__( "Post %d has a category assigned.<br />"), $thispost->ID);
 		flush();
 	}
+	clean_term_cache($default, 'post_category', true);
 	echo "</div>";
 } 
+
+// i18n
+$plugin_dir = basename(dirname(__FILE__)). '/languages';
+load_plugin_textdomain( 'assign-missing-categories', WP_PLUGIN_DIR.'/'.$plugin_dir, $plugin_dir );
 ?>
