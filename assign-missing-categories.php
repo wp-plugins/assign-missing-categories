@@ -37,7 +37,7 @@ Copyright 2008  Stephanie Leary  (email : steph@sillybean.net)
 add_action('admin_menu', 'assign_missing_categories_add_pages');
 
 function assign_missing_categories_add_pages() {
-	add_submenu_page('edit.php', 'Assign Missing Categories', 'Assign Missing Categories', 'manage_options', __FILE__, 'assign_missing_categories_options');
+	add_submenu_page('edit.php', 'Assign Missing Categories', 'Assign Missing Categories', 'manage_categories', __FILE__, 'assign_missing_categories_options');
 }
 
 // displays the options page content
