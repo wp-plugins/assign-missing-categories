@@ -51,19 +51,19 @@ function assign_missing_categories_options() {
 		if ( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
 			assign_missing_categories();
 			// Put an options updated message on the screen ?>
-			<div class="updated"><p><strong><?php _e('Categories assigned.'); ?></strong></p></div>
+			<div class="updated"><p><strong><?php _e('Categories assigned.', 'assign-missing-categories'); ?></strong></p></div>
 		<?php } // Now display the options editing screen ?>
 	
     <div class="wrap">
     <?php if ( !isset($_POST[ $hidden_field_name ]) || $_POST[ $hidden_field_name ] != 'Y' ) { ?>
 	<form method="post" id="assign_missing_categories_form">
-    <h2><?php _e( 'Assign Missing Categories'); ?></h2>
+    <h2><?php _e( 'Assign Missing Categories', 'assign-missing-categories'); ?></h2>
 	<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 	<p>Press the button below to assign the default category to all posts that are not assigned to any categories.</p>
 
 	<p class="submit">
-	<input type="submit" name="submit" value="<?php _e('Assign the default category &raquo;'); ?>" class="button-primary" />
+	<input type="submit" name="submit" value="<?php _e('Assign the default category &raquo;', 'assign-missing-categories'); ?>" class="button-primary" />
 	</p>
 	</form>
     <?php } // if ?>
@@ -81,7 +81,7 @@ function assign_missing_categories() {
 	$allposts = $wpdb->get_results("SELECT ID FROM $wpdb->posts WHERE post_type = 'post'");	
 	?>
 	<div class="wrap">
-	<h2><?php _e( 'Assign Missing Categories'); ?></h2>
+	<h2><?php _e( 'Assign Missing Categories', 'assign-missing-categories'); ?></h2>
 	<?php
 	flush();
     foreach ($allposts as $thispost) {
@@ -89,11 +89,11 @@ function assign_missing_categories() {
 		$terms = array();
 		$terms = wp_get_post_categories($thispost->ID);
 		if (empty($terms)) { 
-			printf(__("Post %d has no categories assigned."), $thispost->ID);
+			printf(__("Post %d has no categories assigned.", 'assign-missing-categories'), $thispost->ID);
 			wp_set_post_categories($thispost->ID, $default);
-			_e( " Assigned default category.<br />");
+			_e( " Assigned default category.<br />", 'assign-missing-categories');
 		}
-		else printf(__( "Post %d has a category assigned.<br />"), $thispost->ID);
+		else printf(__( "Post %d has a category assigned.<br />", 'assign-missing-categories'), $thispost->ID);
 		flush();
 	}
 	clean_term_cache($default, 'post_category', true);
