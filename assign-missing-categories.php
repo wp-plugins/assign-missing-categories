@@ -101,6 +101,4 @@ function assign_missing_categories() {
 } 
 
 // i18n
-$plugin_dir = basename(dirname(__FILE__)). '/languages';
-load_plugin_textdomain( 'assign-missing-categories', WP_PLUGIN_DIR.'/'.$plugin_dir, $plugin_dir );
-?>
+load_plugin_textdomain( 'assign-missing-categories', '', plugin_dir_path(__FILE__) . '/languages' );
