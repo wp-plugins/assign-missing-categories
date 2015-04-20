@@ -5,7 +5,7 @@ Donate Link: http://sillybean.net/code/wordpress/assign-missing-categories/
 Text Domain: assign-missing-categories
 Domain Path: /languages
 Requires at least: 2.3
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 1.2
 
 Assigns the default category to all posts that have no category after you've converted your categories to tags.
